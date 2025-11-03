@@ -26,7 +26,9 @@
         // Handle the root path correctly
         var pathname = l.pathname;
         // For GitHub Pages, the root would be something like /sevamedHMS/
-        var basePath = '/' + l.pathname.split('/')[1];
+        // Safely get the base path, ensuring we don't get undefined
+        var pathParts = l.pathname.split('/');
+        var basePath = pathParts[1] ? '/' + pathParts[1] : '';
         // If we're at the root path, redirect to home page properly
         if (pathname === basePath + '/') {
             pathname = '/';
@@ -40,7 +42,7 @@
             l.hash;
 
         // Check if redirectPath is valid before replacing
-        if (redirectPath && typeof redirectPath === 'string') {
+        if (redirectPath && typeof redirectPath === 'string' && redirectPath.indexOf('undefined') === -1) {
             l.replace(redirectPath);
         } else {
             // Fallback to root if there's an issue
