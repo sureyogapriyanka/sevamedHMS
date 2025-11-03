@@ -21,11 +21,20 @@
         // Most users won't need to change this.
         var pathSegmentsToKeep = 1;
 
+        // Handle the root path correctly
+        var pathname = l.pathname;
+        // If we're at the root, we don't want to redirect to undefined
+        if (pathname === '/' + l.pathname.split('/')[1] + '/') {
+            pathname = '/';
+        } else {
+            pathname = l.pathname;
+        }
+
         var l = window.location;
         l.replace(
             l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?p=/' +
-            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?p=' +
+            pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
             (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
             l.hash
         );
