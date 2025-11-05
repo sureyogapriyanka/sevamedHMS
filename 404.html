@@ -18,36 +18,20 @@
 
         // If you're creating a Project Pages site and NOT using a custom domain,
         // then set pathSegmentsToKeep to 1 (or to the number of path segments in your base path).
-        // Most users won't need to change this.
-        var pathSegmentsToKeep = 1;
+        // For GitHub Pages Project sites, we need to keep 2 path segments
+        var pathSegmentsToKeep = 2;
 
         var l = window.location;
 
-        // Handle the root path correctly
-        var pathname = l.pathname;
-        // For GitHub Pages, the root would be something like /sevamedHMS/
-        // Safely get the base path, ensuring we don't get undefined
-        var pathParts = l.pathname.split('/');
-        var basePath = pathParts[1] ? '/' + pathParts[1] : '';
-        // If we're at the root path, redirect to home page properly
-        if (pathname === basePath + '/') {
-            pathname = '/';
-        }
-
-        // Ensure we don't have undefined in our redirect
-        var redirectPath = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+        // Create a clean redirect URL that preserves the base path
+        var redirectUrl = l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
             l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?p=' +
-            pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
             (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
             l.hash;
 
-        // Check if redirectPath is valid before replacing
-        if (redirectPath && typeof redirectPath === 'string' && redirectPath.indexOf('undefined') === -1) {
-            l.replace(redirectPath);
-        } else {
-            // Fallback to root if there's an issue
-            l.replace('/');
-        }
+        // Redirect to the SPA with the path information
+        l.replace(redirectUrl);
 
     </script>
 </head>
