@@ -43,6 +43,9 @@ Launches the test runner in interactive watch mode.
 ### `npm run build`
 Builds the app for production to the `build` folder.
 
+### `npm run deploy`
+Deploys the app to GitHub Pages.
+
 ### `npm run eject`
 **Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
@@ -51,6 +54,40 @@ If you aren't satisfied with the build tool and configuration choices, you can `
 Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+
+## Deployment
+
+### GitHub Pages Deployment
+
+1. Update the `homepage` property in `frontend/package.json` to match your GitHub username:
+   ```json
+   "homepage": "https://your-username.github.io/sevamedHMS"
+   ```
+
+2. Commit your changes:
+   ```bash
+   git add .
+   git commit -m "Update homepage for GitHub Pages deployment"
+   ```
+
+3. Deploy to GitHub Pages:
+   ```bash
+   cd frontend
+   npm run deploy
+   ```
+
+4. After deployment, your application will be available at:
+   `https://your-username.github.io/sevamedHMS`
+
+### GitHub Actions Deployment (Automatic)
+
+This repository includes a GitHub Actions workflow that automatically deploys to GitHub Pages whenever you push to the `main` branch.
+
+### Custom Domain
+
+To use a custom domain:
+1. Add a `CNAME` file to the `frontend/public` folder with your domain name
+2. Update the `cname` property in `.github/workflows/deploy-frontend.yml`
 
 ## Troubleshooting
 
@@ -64,10 +101,10 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
 
 ### GitHub Pages Specific
 
-1. **Custom Domain**: To use a custom domain, add a `CNAME` file to the `public` folder with your domain name.
+1. **First Deployment**: It may take a few minutes for your site to be available after the first deployment.
 
 2. **Access**: After deployment, your application will be available at:
-   https://sureyogapriyanka.github.io/sevamedHMS/
+   `https://your-username.github.io/sevamedHMS/`
 
 ## Technologies Used
 
@@ -126,10 +163,9 @@ JWT_SECRET=your_jwt_secret
 ```
 
 #### Frontend
-The frontend uses different environment files for different deployment targets:
-- `.env.development` - For local development
-- `.env.github` - For GitHub Pages deployment
-- `.env` - Default production environment
+The frontend uses environment variables for API configuration:
+- `REACT_APP_API_BASE_URL` - Backend API URL
+- `REACT_APP_BASE_PATH` - Base path for routing
 
 ### Running the Application
 
@@ -143,20 +179,6 @@ npm start
 ```bash
 cd frontend
 npm start
-```
-
-### Deployment
-
-#### GitHub Pages
-```bash
-cd frontend
-npm run deploy:github
-```
-
-#### Direct Deployment
-```bash
-cd frontend
-npm run deploy:direct
 ```
 
 ## Folder Descriptions
