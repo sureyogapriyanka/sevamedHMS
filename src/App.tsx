@@ -185,7 +185,10 @@ function Router() {
           </ProtectedRoute>
         </Route>
 
-        <Route component={NotFound} />
+        {/* Catch-all route for undefined paths */}
+        <Route path="/:rest*">
+          <NotFound />
+        </Route>
       </Switch>
     </WouterRouter>
   );

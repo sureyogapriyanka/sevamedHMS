@@ -1,5 +1,7 @@
 import { Card, CardContent } from "../components/ui/card";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, Home } from "lucide-react";
+import { Link } from "wouter";
+import { BASE_PATH } from "../lib/utils";
 
 export default function NotFound() {
   return (
@@ -12,8 +14,18 @@ export default function NotFound() {
           </div>
 
           <p className="mt-4 text-sm text-gray-600">
-            Did you forget to add the page to the router?
+            The page you're looking for doesn't exist or has been moved.
           </p>
+          
+          <div className="mt-6">
+            <Link 
+              href={`${BASE_PATH}/`} 
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+            >
+              <Home className="mr-2 h-4 w-4" />
+              Back to Home
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

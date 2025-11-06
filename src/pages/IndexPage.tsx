@@ -33,6 +33,7 @@ export default function IndexPage() {
       // Only redirect non-patient users
       // Add a small delay to prevent immediate redirect loops
       const timer = setTimeout(() => {
+        // The wouter Router component with base path will handle the base path automatically
         setLocation(`/${user.role}`);
       }, 100);
       return () => clearTimeout(timer);
