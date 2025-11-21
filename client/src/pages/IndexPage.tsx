@@ -116,56 +116,25 @@ const IndexPage: React.FC = () => {
     localStorage.setItem('cookiesAccepted', 'false');
   };
 
-  // State for controlling video playback
+  // State for controlling slideshow
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const videoRefs = useRef<HTMLVideoElement[]>([]);
 
-  // Video sources
-  const videoSources = [
-    "/vecteezy_an-empty-modern-hospital-room-with-medical-equipment-a_47019069.mp4",
-    "/vecteezy_high-angle-view-of-hospital-buildings-in-lahore-pakistan-on_46295790.mp4",
-    "/vecteezy_minimalist-office-lobby_63231568.mp4",
-    "/vecteezy_pharmaceutical-sales-representative-talking-with-female_53823855.mp4",
-    "/vecteezy_an-empty-modern-hospital-room-with-medical-equipment-a_47019069.mp4"
+  // Image sources
+  const imageSources = [
+    "/vecteezy_a-low-down-view-a-close-up-view-of-the-white-concrete_7549211.jpg",
+    "/vecteezy_healthcare-professional-holding-a-stethoscope_2133122.jpg",
+    "/vecteezy_modern-hospital-corridor-illustration_24661719.jpg",
+    "/vecteezy_a-low-down-view-a-close-up-view-of-the-white-concrete_7549211.jpg"
   ];
 
-  // Handle video ended event
-  const handleVideoEnded = () => {
-    setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % videoSources.length);
-  };
-
-  // Set up video event listeners
+  // Change slide every 5 seconds
   useEffect(() => {
-    const currentVideo = videoRefs.current[currentVideoIndex];
-    if (currentVideo) {
-      currentVideo.addEventListener('ended', handleVideoEnded);
+    const interval = setInterval(() => {
+      setCurrentVideoIndex((prevIndex) => (prevIndex + 1) % imageSources.length);
+    }, 5000);
 
-      // Play the current video
-      currentVideo.play().catch(error => {
-        console.log("Autoplay prevented:", error);
-      });
-
-      return () => {
-        currentVideo.removeEventListener('ended', handleVideoEnded);
-      };
-    }
-  }, [currentVideoIndex]);
-
-  // Pause all videos except the current one
-  useEffect(() => {
-    videoRefs.current.forEach((video, index) => {
-      if (video) {
-        if (index === currentVideoIndex) {
-          video.play().catch(error => {
-            console.log("Playback error:", error);
-          });
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      }
-    });
-  }, [currentVideoIndex]);
+    return () => clearInterval(interval);
+  }, [imageSources.length]);
 
   const generateAIResponse = (question: string): string => {
     const lowerQuestion = question.toLowerCase();
@@ -358,28 +327,21 @@ const IndexPage: React.FC = () => {
       <section className="relative min-h-screen overflow-hidden">
         {/* Full Screen Background Media */}
         <div className="absolute inset-0">
-          {/* Slideshow Videos - Full Coverage */}
-          {videoSources.map((src, index) => (
+          {/* Slideshow Images - Full Coverage */}
+          {imageSources.map((src, index) => (
             <div
               key={index}
               className={`absolute inset-0 ${index === currentVideoIndex ? 'opacity-100' : 'opacity-0'} transition-opacity duration-1000`}
             >
-              <video
-                ref={(el) => {
-                  if (el) {
-                    videoRefs.current[index] = el;
-                  }
-                }}
+              <img
                 src={src}
-                muted
-                playsInline
                 className="w-full h-full object-cover"
-                onEnded={handleVideoEnded}
+                alt="Hospital background"
               />
             </div>
           ))}
 
-          {/* Removed blur overlays for clearer video display */}
+          {/* Removed blur overlays for clearer image display */}
         </div>
 
         {/* Content */}
@@ -420,8 +382,8 @@ const IndexPage: React.FC = () => {
                 <div
                   key={index}
                   className={`w-4 h-4 rounded-full shadow-lg backdrop-blur-sm transition-all duration-300 ${index === currentVideoIndex
-                      ? 'bg-white scale-125'
-                      : 'bg-white/50'
+                    ? 'bg-white scale-125'
+                    : 'bg-white/50'
                     }`}
                 ></div>
               ))}
