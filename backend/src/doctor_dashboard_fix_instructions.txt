@@ -1,0 +1,59 @@
+DoctorDashboard Component Fix Instructions
+=====================================
+
+Issue 1: Duplicate Declaration Error
+-----------------------------------
+Error: Identifier 'usePatientByUserId' has already been declared. (160:10)
+
+Fix:
+1. Open the file: c:\xampp\htdocs\src\sevamedHms\client\src\pages\dashboards\DoctorDashboard.tsx
+2. Locate line 160 which contains:
+   'const { usePatientByUserId } = usePatients();'
+3. Delete this entire line (it's a duplicate declaration)
+
+Issue 2: Enhance Patient Records Display
+---------------------------------------
+Enhance the patient records display to show detailed medical information.
+
+Changes needed:
+
+1. In the patient records section (around line 1295), update the map function:
+   Change:
+   .map((patient: UserType) => (
+   
+   To:
+   .map((patient: UserType) => {
+     // Fetch detailed patient record
+     const { data: patientRecord } = usePatientByUserId(patient.id || '');
+     
+     return (
+
+2. Before the closing parenthesis of the map function, add:
+   );
+
+3. Update the slice limit from 6 to 10 to show all 10 patient records:
+   Change:
+   .slice(0, 6)
+   
+   To:
+   .slice(0, 10)
+
+4. In the patient card details section (around line 1317), add the following after the email div:
+   {patientRecord?.data && (
+     <>
+       <div className="flex items-center text-sm text-gray-600">
+         <Droplets className="h-4 w-4 mr-2 text-purple-600" />
+         <span>Blood: {patientRecord.data.bloodType || "N/A"}</span>
+       </div>
+       <div className="flex items-center text-sm text-gray-600">
+         <Scale className="h-4 w-4 mr-2 text-purple-600" />
+         <span>Weight: {patientRecord.data.weight || "N/A"} kg</span>
+       </div>
+       <div className="flex items-center text-sm text-gray-600">
+         <Ruler className="h-4 w-4 mr-2 text-purple-600" />
+         <span>Height: {patientRecord.data.height || "N/A"} cm</span>
+       </div>
+     </>
+   )}
+
+This will display the detailed medical information (blood type, weight, height) for each patient in the patient records tab.

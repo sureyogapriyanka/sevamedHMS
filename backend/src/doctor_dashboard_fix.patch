@@ -1,0 +1,58 @@
+diff --git a/client/src/pages/dashboards/DoctorDashboard.tsx b/client/src/pages/dashboards/DoctorDashboard.tsx
+index xxxxxxx..yyyyyyy 100644
+--- a/client/src/pages/dashboards/DoctorDashboard.tsx
++++ b/client/src/pages/dashboards/DoctorDashboard.tsx
+@@ -156,10 +156,6 @@ const DoctorDashboard: React.FC = () => {
+   // Fetch patient data for appointments
+   const { data: patientsData = [] } = useQuery<UserType[]>({
+     queryKey: ["/api/users"],
+     enabled: true // Always fetch patient data
+-  });
+-
+-  // Custom hook for patient operations
+-  const { usePatientByUserId } = usePatients();
++  });
+ 
+   const { data: myQueue = [] } = useQuery<QueueEntry[]>({
+     queryKey: ["/api/queue/doctor", user?.id],
+@@ -1315,6 +1315,24 @@ const DoctorDashboard: React.FC = () => {
+                           <Mail className="h-4 w-4 mr-2 text-purple-600" />
+                           <span className="truncate">{patient.email || "N/A"}</span>
+                         </div>
++                        {patientRecord?.data && (
++                          <>
++                            <div className="flex items-center text-sm text-gray-600">
++                              <Droplets className="h-4 w-4 mr-2 text-purple-600" />
++                              <span>Blood: {patientRecord.data.bloodType || "N/A"}</span>
++                            </div>
++                            <div className="flex items-center text-sm text-gray-600">
++                              <Scale className="h-4 w-4 mr-2 text-purple-600" />
++                              <span>Weight: {patientRecord.data.weight || "N/A"} kg</span>
++                            </div>
++                            <div className="flex items-center text-sm text-gray-600">
++                              <Ruler className="h-4 w-4 mr-2 text-purple-600" />
++                              <span>Height: {patientRecord.data.height || "N/A"} cm</span>
++                            </div>
++                          </>
++                        )}
+                       </div>
+                       <Button
+                         variant="outline"
+@@ -1320,7 +1338,7 @@ const DoctorDashboard: React.FC = () => {
+                 {patientsData
+                   .filter((patient: UserType) => patient.role === "patient")
+                   .slice(0, 6)
+-                  .map((patient: UserType) => (
++                  .map((patient: UserType) => {
+                     // Fetch detailed patient record
+                     const { data: patientRecord } = usePatientByUserId(patient.id || '''');
+                     
+@@ -1334,7 +1352,7 @@ const DoctorDashboard: React.FC = () => {
+                         }}
+                       >
+                         View Details
+-                      </Button>
++                      </Button>
+                     );
+                   })}
+               </div>
